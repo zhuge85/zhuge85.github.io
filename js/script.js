@@ -16,6 +16,13 @@ function loadProces(_count) {
         });
     });
 }*/
+function ss(num){
+    num ? [num = 0,con = 'soon',time = 1000] : [num = 1,con = 'slow',time = 4000];
+    setTimeout(function() {
+        $('#cons').html(con);
+    },time)
+    ss(num);
+}
 //加载时触发
 $(window).load(function() {
     $('html,body').scrollTop(0).addClass('hidden');
@@ -29,12 +36,13 @@ $(window).load(function() {
                 $('#load').hide();
                 $('html,body').removeClass('hidden');
             },1000);
-            setTimeout(function() {
-                timer2  = setInterval(()=>{
+            setTimeout(change,5000);
+            /*setTimeout(function() {
+                timer2  = setTimeout(()=>{//setInterval
                     num ? [num = 0,con = txt1] : [num = 1,con = txt2];
                     $('#cons').html(con);
                 },1000);
-            },5000);
+            },5000);*/
         })
       ];
     },50);
@@ -75,6 +83,14 @@ $(window).load(function() {
         });
     });*/
 })
+function change() {
+    $('#cons').html('slow');
+    setTimeout(change2,400)
+}
+function change2() {
+    $('#cons').html('soon');
+    setTimeout(change,5000)
+}
 //窗口变化是触发
 $(window).resize(function() {
     //getheight();
@@ -127,10 +143,10 @@ $(function() {
                 left=e.pageX-$(this).offset().left,
                 top=e.pageY-$(this).offset().top;
             ball.css({'left':left,'top':top});
-            $(this).append( ball );
+            $(this).append(ball);
             ball.on('animationend',function(){
                 ball.remove();
-            });//每次在执行完动画把“水波”从文档中移出
+            });
         })
     })
 })

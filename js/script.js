@@ -1,7 +1,17 @@
-/*var _count = 0;
+let _scroll = 0,
+    _class = '',
+    _id = '',
+    _title = '',
+    _count = 0,
+    _index = 0,
+    num     = 1,
+    video   = document.getElementById('play'),
+    bgMusic = document.getElementById('bgMusic'),
+    _text = ['富强', '民主', '文明', '和谐', '自由', '平等', '公正' ,'法治', '爱国', '敬业', '诚信', '友善'];
+/*
 loadProces(_count += 10);
-$("img").one("load", function() {
-    var len = document.getElementsByTagName('img').length;
+$('img').one('load', function() {
+    let len = document.getElementsByTagName('img').length;
     loadProces(_count += (60 / len));
 });
 function loadProces(_count) {
@@ -16,224 +26,403 @@ function loadProces(_count) {
         });
     });
 }*/
-function ss(num){
-    num ? [num = 0,con = 'soon',time = 1000] : [num = 1,con = 'slow',time = 4000];
-    setTimeout(function() {
-        $('#cons').html(con);
-    },time)
-    ss(num);
-}
+
 //加载时触发
 $(window).load(function() {
     $('html,body').scrollTop(0).addClass('hidden');
-    var n = 0,num = 0,txt1 = 'soon',txt2 = 'slow',con,
-    timer = setInterval(()=>{
-        $('.count').html(n+'%');
-        n < 100 ? n += 1 : [clearInterval(timer),
-        $('.count').fadeOut(function() {
-            $('#load').removeClass('active'),
-            setTimeout(function() {
-                $('#load').hide();
-                $('html,body').removeClass('hidden');
-            },1000);
-            setTimeout(change,5000);
-            /*setTimeout(function() {
-                timer2  = setTimeout(()=>{//setInterval
-                    num ? [num = 0,con = txt1] : [num = 1,con = txt2];
-                    $('#cons').html(con);
-                },1000);
-            },5000);*/
-        })
-      ];
-    },50);
-    
-
-    //getheight();
-    /*$('.count').each(function() {
-        $(this).stop().prop('Counter', $(this).text()).animate({
-            Counter: 100
-        }, {
-            duration: 4000,
-            step: function(now) {
-                $(this).text(Math.ceil(now));
-                if (now == 100) {
-                    $(this).fadeOut(function() {
-                        $('#load').removeClass('active');
-                        setTimeout(function() {
-                            $('#load').hide();
-                            $("img.img_cases").each(function() {
-                                var src = $(this).data('src');
-                                $(this).attr('src', src);
-                            });
-                            $('html,body').removeClass('hidden');
-                            if (render) {
-                                if (window.location.hash) {
-                                    $('html,body').animate({
-                                        scrollTop: $(window.location.hash).offset().top
-                                    })
-                                }
-                                time();
-                                // resize();
-                                //canvas.setAttribute('width', docWidth);
-                            }
-                        }, 1000)
-                    });
-                }
+    $('body').addClass('body-bk');
+    // 模拟加载进度
+    $({property: 0}).animate({property: 100}, {
+        duration: 3000,
+        step: function() {
+            let percentage = Math.round(this.property);
+            $('.count').html(percentage + '%');
+            $('#progress').css('width',  percentage + "%");
+            if(percentage == 100) {
+                $("#progress").addClass("done");
+                $('.count').fadeOut(function() {
+                    $('#load').removeClass('active');
+                    setTimeout(function() {
+                        $('#load').hide();
+                        $('html,body').removeClass('hidden');
+                        $('.sectionwrap > .section').eq(0).addClass('active');
+                        showTime();
+                        bgMusic.play();
+                    }, 1000);
+                });
             }
-        });
-    });*/
+        }
+    });
+    // 模拟加载进度2
+    // let n = 0,
+    //     timer,
+    //     timer2;
+    // timer = setInterval(() => {
+    //     $('.count').html(n + '%');
+    //     n < 100 ? n += 5 : [clearInterval(timer),
+    //         $('.count').fadeOut(function() {
+    //             $('#load').removeClass('active');
+    //             setTimeout(function() {
+    //                 $('#load').hide();
+    //                 $('html,body').removeClass('hidden');
+    //                 $('.sectionwrap > .section').eq(0).addClass('active');
+    //                 showTime();
+    //                 bgMusic.play();
+    //                 clearInterval(timer2);
+    //             }, 1000);
+    //         })
+    //     ];
+    // }, 50);
+    // timer2 = setInterval(() => {
+    //     const length = 2000;
+    //     let el = $('.lod');
+    //     let coordinate = '';
+    //     for (let i = 0; i < length; i++) {
+    //         coordinate +=
+    //             parseInt(Math.random() * 10000) / 100 + '% ' +
+    //             parseInt(Math.random() * 10000) / 100 + '%, ';
+    //     }
+    //     coordinate = 'polygon(' + coordinate.slice(0, -2) + ')';
+    //     el.css('clipPath', coordinate);
+    //     el.css('backgroundColor', '#' + (~~(Math.random() * (1 << 24))).toString(16));
+    // }, 500);
 })
-function change() {
-    $('#cons').html('slow');
-    setTimeout(change2,400)
-}
-function change2() {
-    $('#cons').html('soon');
-    setTimeout(change,5000)
-}
+
 //窗口变化是触发
 $(window).resize(function() {
     //getheight();
 })
 //滚动效果
 $(window).scroll(function() {
-    var scrolltop = $(this).scrollTop(),
-        $height = $(window).height();
-    //回到顶部按钮存在时 且距顶部大于200 出现
+    let scrolltop = $(this).scrollTop(),
+        $height = $(window).height(),
+        _titleNext = '',
+        _classNext = '',
+        _idNext = '',
+        _cases;
     if ($('#backtotop').length > 0) {
-        if (scrolltop > 200) {
+        if (scrolltop > 800) {
             $('#backtotop').addClass('showme');
         } else {
             $('#backtotop').removeClass('showme');
         }
     }
-    //浮动块存在时 距顶部的距离 减去 导航的局 小于等于 滚动距离 时 浮动
-    if ($('.container .aside').length > 0) {
-        if (scrolltop >= theTarget - theHeader + 100) {
-            $('.container .aside').addClass('fixed');
-            /*$('.container .aside').css({
-                'position': 'fixed',
-                'top': '1.6rem'
-            });*/
-        } else if (scrolltop < theTarget) {
-            $('.container .aside').removeClass('fixed');
-            /*$('.container .aside').css({
-                'position': 'inherit',
-                'top': ''
-            });*/
+    $('.section').each(function() {
+        let _top = $(this).offset().top;
+        let index = $(this).index();
+        let $scroll = $(window).scrollTop();
+        if (scrolltop > _top - $height / 2) {
+            _titleNext = $(this).attr('zhu-title');
+            _classNext = $(this).attr('zhu-bg');
+            _idNext = $(this).attr('zhu-id');
+        }
+    })
+    $('.work_item:visible').each(function() {
+        var _top = $(this).offset().top;
+        if (scrolltop > _top - $height / 2) {
+            _cases = $(this);
+        }
+    });
+    $('.work_item').removeClass('active');
+    if (_cases) _cases.addClass('active');
+    if (_id != _idNext) {
+        _id = _idNext;
+        if (_class != _classNext) {
+            _class = _classNext;
+            $('body').removeClass().addClass(_class);
+        }
+        if (_title != _titleNext) {
+            _title = _titleNext;
+            $('#tips').html(_title).removeClass().addClass('text-' + $('#tips').html().length);
+        }
+        if (_id == 'head') {
+            $('header').addClass('header-full');
+        } else {
+            $('header').removeClass('header-full');
+        }
+        if (_id == 'contact') {
+            $('footer').addClass('footer_active');
+        } else {
+            $('footer').removeClass('footer_active');
+        }
+        $('.section[zhu-id=' + _id + ']').addClass('active').siblings().removeClass('active');
+        if (_id == 'skills') {
+            $('.section .skill .circle-svg').each(function () {
+                let val  = $(this).attr('zhu-value'),
+                    r    = $(this).attr('r'),
+                    percent = val / 100,
+                    perimeter = Math.PI * 2 * r,
+                    time =50,
+                    n = 0,
+                    timer = setInterval(() => {
+                        $(this).siblings('text').html(Math.floor(n) + '%');
+                        n < val-val/time ? [n += val/time] : [clearInterval(timer),$(this).siblings('text').html(val+'%')];
+                    }, time)
+                // $(this).siblings('text').text(val+'%');
+                $(this).css('animation-name', 'p'+val);
+                // $(this).attr('stroke-dasharray', perimeter * percent + " " + perimeter * (1- percent));
+            });
+        } else {
+            $('.section .skill .circle-svg').css('animation-name', '');
         }
     }
-
 })
 $(function() {
-    var backtotop = $('<div id="backtotop"><div class="btnbg"></div></div>');
+    let sUserAgent = navigator.userAgent.toLowerCase();
+        bIsIpad = sUserAgent.match(/ipad/i) == 'ipad',
+        bIsIphoneOs = sUserAgent.match(/iphone os/i) == 'iphone os',
+        bIsMidp = sUserAgent.match(/midp/i) == 'midp',
+        bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == 'rv:1.2.3.4',
+        bIsUc = sUserAgent.match(/ucweb/i) == 'ucweb',
+        bIsAndroid = sUserAgent.match(/android/i) == 'android',
+        bIsCE = sUserAgent.match(/windows ce/i) == 'windows ce',
+        bIsWM = sUserAgent.match(/windows mobile/i) == 'windows mobile',
+        div_str = '您的浏览设备为：';
+
+    if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
+        div_str += '移动端';
+        $('html').addClass('move');
+    } else {
+        div_str += '电脑端';
+        $('html').addClass('computer');
+    }
+    let backtotop = $('<div id="backtotop"><div class="btnbg"></div></div>');
     $("body").append(backtotop);
-    $(document).on('click', '#backtotop', function() {
-        $("#backtotop").addClass("launch");
-        $('html,body').animate({
-            scrollTop: 0
-        }, 500, function() {
-            $("#backtotop").removeClass("launch")
-        });
-    })
-    
-    $('.wave').each(function(){
-        $(this).on('mousedown',function(e){
-            var ball = $('<span class="wavespan"></span>'),
-                left=e.pageX-$(this).offset().left,
-                top=e.pageY-$(this).offset().top;
-            ball.css({'left':left,'top':top});
+    $('#tips').html($('.sectionwrap > *').eq(0).attr('zhu-title'));
+    // 主框架添加类名
+    $('.section').each(function() {
+        let num = $(this).index();
+        $(this).addClass('section_' + num);
+    });
+    // 波纹
+    $('.wave').each(function() {
+        $(this).on('mousedown', (e) => {
+            let ball = $('<span class="wavespan"></span>'),
+                left = e.pageX - $(this).offset().left,
+                top = e.pageY - $(this).offset().top;
+            ball.css({
+                'left': left,
+                'top': top
+            });
             $(this).append(ball);
-            ball.on('animationend',function(){
+            ball.on('animationend', function() {
                 ball.remove();
             });
         })
+    });
+    // 弹出文字
+    $(document).on('click', function(e) {
+        let $i = $('<span></span>').text(_text[_index]),
+            x = e.pageX,
+            y = e.pageY;
+        _index = (_index + 1) % _text.length;
+        $i.css({
+            'z-index': 99999,
+            'top': y - 20,
+            'left': x,
+            'position': 'absolute',
+            'font-size': '20',
+            'font-weight': '500',
+            'color': '#fe053c',
+            '-webkit-user-select': 'none',
+            '-moz-user-select': 'none',
+            '-ms-user-select': 'none',
+            '-o-user-select': 'none',
+            'user-select': 'none'
+        });
+        $('body').append($i);
+        $i.animate({'top': y-180,'opacity': 0},1500, () => {
+            $i.remove();
+        });
+    });
+    //表单
+    $('.form_close').click(function(e) {
+        stopBubble(e);
+        $('#form,#form .section').removeClass('active');
+        $('html').removeClass('hidden');
+        if ($('#form').is('.section_2')) {
+            $('#form').removeClass('section_2');
+            $('.section_2').addClass('active');
+        } else {
+            $('#form').removeClass('section_5');
+            $('.section_5').addClass('active');
+        }
+    });
+    $(document).on('click', '.button', function(e) {
+        stopBubble(e);
+        if ($(this).parents('section').is('.section_2')) {
+            $('#form').addClass('section_2');
+        } else {
+            $('#form').addClass('section_5');
+        }
+        $(this).parents('section').removeClass('active');
+        $('#form,#form .section').addClass('active');
+        $('html').addClass('hidden');
+    });
+    $('textarea,input,#play').click(function(e) {
+        stopBubble(e);
+    });
+
+    $(document).on('click', '#backtotop', function(e) {
+        stopBubble(e);
+        scroll(0,0);
+        // $("#backtotop").addClass("launch");
+        // $('html,body').animate({
+        //     scrollTop: 0
+        // }, 500, function() {
+        //     $("#backtotop").removeClass("launch")
+        // });
     })
 })
-$(document).scroll(function() {
-    $('.section').each(function(){
-        var $leavetop = $(this).offset().top-100;
-        var index     = $(this).index();
-        var $height   = $(this).outerHeight(true);
-        var $scroll    = $(window).scrollTop()
-        if($leavetop+$height>$scroll){
-            if($height>$scroll-$leavetop){
-               $('.section').removeClass('active').eq($(this).index()).addClass('active');
-               return false;
-            }
-        }
-    })
-    /*var docHeight = $(window).height(),
-        docScroll = $(window).scrollTop(),
-        _classNext = '';
-    $('.section').each(function() {
-        var _top = $(this).offset().top;
-        //console.log(_top,docScroll)
-        if (docScroll > _top) {
-            //$('.section').removeClass('active');
-            //$(this).addClass('active')
-            _classNext = $(this).attr('class');
-            console.log(_classNext)
-        }
-        
-    });*/
-})
-$(document).ready(function() {
-    var sUserAgent = navigator.userAgent.toLowerCase();
-    var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
-    var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
-    var bIsMidp = sUserAgent.match(/midp/i) == "midp";
-    var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
-    var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
-    var bIsAndroid = sUserAgent.match(/android/i) == "android";
-    var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
-    var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
 
-    var div_str = "您的浏览设备为：";
-    if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
-        div_str += "移动端";
-        $('html').addClass('move');
-    } else {
-        div_str += "pc";
-        $('html').addClass('computer');
-    }
-    $('.section').each(function() {
-        var num =$(this).index();
-        $(this).addClass('section_'+num);
-    })
-});
+//滚动按钮
+const scrollan = () => {
+    _scroll != -850 ? _scroll -= 50 : _scroll = 0;
+    $('#scroll').css('background-position','0 ' + _scroll);
+}
+window.setInterval(scrollan, 50);
 
-function getQueryVariable(variable) {
-    var query = window.location.search.substring(1);
-    var vars = query.split("&");
-    for (var i = 0; i < vars.length; i++) {
-        var pair = vars[i].split("=");
+const getQueryVariable = variable => {
+    let query = window.location.search.substring(1);
+    let vars = query.split('&');
+    for (let i = 0; i < vars.length; i++) {
+        let pair = vars[i].split('=');
         if (pair[0] == variable) {
             return pair[1];
         }
     }
-    return (false);
+    // return false;
 }
+// 设置全屏高度
+const getheight = () => {
+    let $height = $(window).height();
+    $('.sectionwrap > *').css('height', $height);
+}
+video.onclick = function () {
+    if (bgMusic.paused) {
+        bgMusic.play();
+        this.classList.remove("pause");
+        this.setAttribute('zhu-value','暂停');;
+    } else {
+        bgMusic.pause();
+        this.classList.add("pause");
+        this.setAttribute('zhu-value','播放');;
+    }
+}
+bgMusic.addEventListener('ended', function() {
+    $("#play").removeClass('pause');
+}, false);
+// $('#blog-calendar').prepend('<div id='clockdiv'><canvas id='dom' width='120' height='120'>时钟canvas</canvas></div>');
+// var canvas = document.getElementById('dom');
+// var context = canvas.getContext('2d');
+// var height = context.canvas.height;
+// var width = context.canvas.width;
+// var r = width / 2;
+// var rem = width/200;
 
-function timestampToTime(timestamp) {
-    var date = new Date(timestamp * 1000),
-        Y = date.getFullYear(),
-        M = checkTime(date.getMonth() + 1),
-        D = checkTime(date.getDate()),
-        h = checkTime(date.getHours()),
-        m = checkTime(date.getMinutes()),
-        s = checkTime(date.getSeconds());
-    return Y + '-' + M + '-' + D; //+' '+h+':'+m+':'+s;
-}
+// //时钟背景
+// function drawBackground() {
+//     context.save();
+//     context.translate(r, r);
+//     context.beginPath();
+//     context.lineWidth = 8*rem;
+//     context.strokeStyle = '#000'
+//     context.arc(0, 0, r - 5*rem, 0, 2 * Math.PI, false);
+//     context.stroke();
+//     context.closePath();
+// //遍历小时数
+//     var houseNumble = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2];
+//     houseNumble.forEach(function (number, i) {
+//         context.textAlign = 'center';
+//         context.textBaseline = 'middle'
+//         context.font = 18*rem+'px Arial'
+//         var rad = 2 * Math.PI / 12 * i;
+//         var x = Math.cos(rad) * (r - 30*rem);
+//         var y = Math.sin(rad) * (r - 30*rem);
+//         context.fillText(number, x, y);
+//     })
+// //定义刻度
+//     for (var i = 0; i < 60; i++) {
+//         var rad = 2 * Math.PI / 60 * i;
+//         var x = Math.cos(rad) * (r - 18*rem);
+//         var y = Math.sin(rad) * (r - 18*rem);
+//         context.beginPath();
+//         if (i % 5 == 0) {
+//             context.fillStyle = '#000'
+//             context.arc(x, y, 2*rem, 0, 2 * Math.PI);
+//         } else {
+//             context.fillStyle = '#ccc'
+//             context.arc(x, y, 2*rem, 0, 2 * Math.PI);
+//         }
 
-function checkTime(i) {
-    if (i < 10) {
-        i = '0' + i
-    };
-    return i;
-}
-function getheight(){
-    var $height = $(window).height();
-    console.log($height);
-    $('.section').css('height',$height);
-}
+//         context.fill();
+//         context.closePath();
+//     }
+// }
+// //定义时针
+// function drawHour(hour,minute) {
+//     context.save();
+//     context.beginPath();
+//     context.lineWidth = 6*rem;
+//     context.lineCap = 'round'
+//     var rad = 2 * Math.PI / 12 * hour;
+//     var mrad = 2* Math.PI/12/60 * minute;
+//     context.rotate(rad+mrad);
+//     context.moveTo(0, 10*rem);
+//     context.lineTo(0, -r / 2);
+//     context.stroke();
+//     context.restore();
+// }
+// //定义分针
+// function drawMinute(minute) {
+//     context.save();
+//     context.beginPath();
+//     context.lineWidth = 3*rem;
+//     context.lineCap = 'round';
+//     var rad = 2 * Math.PI / 60 * minute;
+//     context.rotate(rad);
+//     context.moveTo(0, 15*rem);
+//     context.lineTo(0, -r + 34)
+//     context.stroke();
+//     context.restore();
+// }
+// //定义秒钟
+// function drawSecond(second) {
+//     context.save();
+//     context.beginPath();
+//     context.lineWidth = 2*rem;
+//     context.lineCap = 'round';
+//     context.fillStyle = 'red'
+//     var rad = 2 * Math.PI / 60 * second;
+//     context.rotate(rad);
+//     context.moveTo(-2 ,20);
+//     context.lineTo( 2, 20);
+//     context.lineTo( 1, -r + 18);
+//     context.lineTo( -1, -r + 18);
+//     context.fill();
+//     context.restore();
+// }
+// //画中心点
+// function drawDot() {
+//     context.beginPath();
+//     context.fillStyle = '#fff'
+//     context.arc(0, 0, 4*rem, 0, 2 * Math.PI, false);
+//     context.fill();
+// }
+// //时间函数，让时钟根据当前时间跳动
+// function Draw() {
+//     context.clearRect(0,0,width,height);
+//     var time= new Date();
+//     var hour =time.getHours();
+//     var minute = time.getMinutes();
+//     var second = time.getSeconds();
+//     drawBackground();
+//     drawHour(hour,minute);
+//     drawMinute(minute);
+//     drawSecond(second);
+//     drawDot();
+//     context.restore()
+// }
+
+// Draw();
+// setInterval(Draw,1000);

@@ -8,7 +8,7 @@ let s = window.console || {log: function(i) {console.log(i)}, info: function(i) 
     tc = ['color:#09b3cd;', 'color:#f15928;', 'color:#8cc540;', 'color:#92278f;', 'color:#f46523;', 'color:#3f51b5;', 'color:#fbC02d;', 'color:#09b3cd;', 'color:#8cc540;'],
     sd = ['0px 1px 0px ', '0px 2px 0px ', '0px 3px 0px ', '0px 4px 0px ', '0px 5px 0px ', '0px 6px 0px ', '0px 7px 0px ', '0px 8px 7px '],
     zh = ['padding:15px 10px;margin:10px 5px;line-height:70px;font-size:14px;border-radius: 4px;','33423939500@qq.com'],
-    m = '<aside><section class="musicbox aside-item"><dl><dt class="art"><img src="http://zhujianbo.cn/icon/c1.jpg"></dt><dd class="icon-song"><span></span>程序员版《成都》</dd><dd class="icon-artist"><span></span>演唱：戴秋平</dd><dd class="icon-change">切换男版</dd><dd><audio src="mp3/song.mp3" controls=""></audio></dd></dl></section></aside>';
+    m = '<aside><section class="musicbox aside-item"><dl><dt class="art"><img src="icon/c1.jpg"></dt><dd class="icon-song"><span></span>程序员版《成都》</dd><dd class="icon-artist"><span></span>演唱：戴秋平</dd><dd class="icon-change">切换男版</dd><dd><audio src="mp3/song.mp3" controls=""></audio></dd></dl></section></aside>';
 
 function a() {
     s.info("%c你好，打开Console是想更加了解我吗？那就如你所愿 ^-^", cl[1] + "font-weight: bold;"),

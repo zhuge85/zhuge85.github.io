@@ -170,6 +170,6 @@ function p(t, o) {
 }());
 
 $("body").on("click", ".musicbox .icon-change", function() {
-    $(this).html() == "切换男版" ? [$(this).next().children("audio").attr("src", "https://zhuge85.github.io/mp3/song-man.mp3"), $(this).html("切换女版"), $(this).prev().html("演唱：黄放")] : [$(this).next().children("audio").attr("src", "https://zhuge85.github.io/mp3/song.mp3"), $(this).html("切换男版"), $(this).prev().html("演唱：戴秋平")];
+    $(this).html() == "切换男版" ? [$(this).next().children("audio").attr("src", "http://zhujianbo.cn/mp3/song-man.mp3"), $(this).html("切换女版"), $(this).prev().html("演唱：黄放")] : [$(this).next().children("audio").attr("src", "http://zhujianbo.cn/mp3/song.mp3"), $(this).html("切换男版"), $(this).prev().html("演唱：戴秋平")];
     $(this).next().children("audio")[0].play();
 })
